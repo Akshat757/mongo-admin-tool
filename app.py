@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
-
+import config as c
 app = Flask(__name__)
 
 # MongoDB Connection
-client = MongoClient('mongodb://localhost:27017')
-db = client['my_database']  # Change 'my_database' to your database name
+client = MongoClient(c.db_url)
+db = client[c.db_name]  # Change 'my_database' to your database name
 
 
 # Route to list all databases
