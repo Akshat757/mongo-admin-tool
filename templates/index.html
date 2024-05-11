@@ -8,7 +8,12 @@
 </head>
 <body>
     <h1>MongoDB Admin Tool</h1>
-    <div id="databases"></div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <button id="showDatabases">Show Databases</button>
+
+    <script>
+        document.getElementById('showDatabases').addEventListener('click', function() {
+            window.location.href = '/databases';
+        });
+    </script>
 </body>
 </html>
