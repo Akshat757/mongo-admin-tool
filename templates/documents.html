@@ -4,22 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documents List</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
     <link rel="stylesheet" href="../static/css/styles.css">
+
 </head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff; /* Set background color of the table */
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd; /* Add border around each cell */
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+</style>
 <body>
     <h1>Documents List</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <!-- Add more table headers based on your document structure -->
+                <!-- Dynamically generate table headers based on the fields of the first document -->
+                {% for field in documents[0].keys() %}
+                    <th>{{ field }}</th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
             {% for document in documents %}
             <tr>
-                <td>{{ document._id }}</td>
-                <!-- Add more table data cells based on your document structure -->
+                <!-- Dynamically generate table cells based on the fields of each document -->
+                {% for value in document.values() %}
+                    <td>{{ value }}</td>
+                {% endfor %}
             </tr>
             {% endfor %}
         </tbody>

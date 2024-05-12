@@ -23,7 +23,7 @@ def list_databases():
 @app.route('/collections/<database_name>', methods=['GET'])
 def list_collections(database_name):
     collections = client[database_name].list_collection_names()
-    return render_template('collections.html', collections=collections)
+    return render_template('collections.html', collections=collections, database=database_name)
 
 
 
@@ -32,7 +32,7 @@ def list_collections(database_name):
 def get_documents(database_name, collection_name):
     collection = client[database_name][collection_name]
     documents = list(collection.find())
-    return render_template('documents.html', documents=documents)
+    return render_template('documents.html', collection_name=collection_name, documents=documents)
 
 
 
