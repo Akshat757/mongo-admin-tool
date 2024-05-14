@@ -13,6 +13,7 @@ def home():
     return render_template('index.html')
 
 # Route to list all databases
+# route database
 @app.route('/databases', methods=['GET'])
 def list_databases():
     databases = client.list_database_names()
