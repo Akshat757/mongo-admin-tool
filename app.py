@@ -18,14 +18,25 @@ def home():
 @app.route('/databases', methods=['GET'])
 def list_databases():
     databases = client.list_database_names()
-    return render_template('databases.html', databases=databases)
+    databases_with_counts = []
+    for database_name in databases:
+        db = client[database_name]
+        collections_count = len(db.list_collection_names())
+        databases_with_counts.append({'name': database_name, 'count': collections_count})
+    return render_template('databases.html', databases=databases_with_counts)
+
 
 
 # Route to list collections in a database
 @app.route('/collections/<database_name>', methods=['GET'])
 def list_collections(database_name):
     collections = client[database_name].list_collection_names()
-    return render_template('collections.html', collections=collections, database=database_name)
+    collections_with_counts = []
+    for collection_name in collections:
+        collection = client[database_name][collection_name]
+        count = collection.count_documents({})
+        collections_with_counts.append({'name': collection_name, 'count': count})
+    return render_template('collections.html', collections=collections_with_counts, database=database_name)
 
 
 # Route to retrieve all documents from a collection

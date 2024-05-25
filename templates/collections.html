@@ -6,7 +6,6 @@
     <title>Collections List</title>
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
     <link rel="stylesheet" href="../static/css/styles.css">
-
 </head>
 <body>
     <h1>Collections List</h1>
@@ -14,12 +13,14 @@
         <thead>
             <tr>
                 <th>Collection Name</th>
+                <th>Document Count</th>
             </tr>
         </thead>
         <tbody>
             {% for collection in collections %}
             <tr>
-                <td><a href="/collections/{{ database }}/{{ collection }}">{{ collection }}</a></td>
+                <td><a href="/collections/{{ database }}/{{ collection.name }}">{{ collection.name }}</a></td>
+                <td>{{ collection.count }}</td>
             </tr>
             {% endfor %}
         </tbody>

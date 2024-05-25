@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database List</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
     <link rel="stylesheet" href="../static/css/styles.css">
-
 </head>
 <body>
     <h1>Database List</h1>
@@ -14,12 +12,14 @@
         <thead>
             <tr>
                 <th>Database Name</th>
+                <th>Collection Count</th>
             </tr>
         </thead>
         <tbody>
             {% for database in databases %}
             <tr>
-                <td><a href="/collections/{{ database }}">{{ database }}</a></td>
+                <td><a href="/collections/{{ database['name'] }}">{{ database['name'] }}</a></td>
+                <td>{{ database['count'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
