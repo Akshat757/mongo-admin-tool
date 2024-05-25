@@ -12,14 +12,22 @@
         <thead>
             <tr>
                 <th>Database Name</th>
-                <th>Collection Count</th>
+                <th>Collections Count</th>
+                <th>Data Size</th>
+                <th>Storage Size</th>
+                <th>Index Size</th>
+                <th>File Size</th>
             </tr>
         </thead>
         <tbody>
             {% for database in databases %}
             <tr>
-                <td><a href="/collections/{{ database['name'] }}">{{ database['name'] }}</a></td>
-                <td>{{ database['count'] }}</td>
+                <td><a href="/collections/{{ database.name }}">{{ database.name }}</a></td>
+                <td>{{ database.collections_count }}</td>
+                <td>{{ database.data_size }}</td>
+                <td>{{ database.storage_size }}</td>
+                <td>{{ database.index_size }}</td>
+                <td>{{ database.file_size }}</td>
             </tr>
             {% endfor %}
         </tbody>

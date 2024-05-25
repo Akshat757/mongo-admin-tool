@@ -18,26 +18,36 @@ def home():
 @app.route('/databases', methods=['GET'])
 def list_databases():
     databases = client.list_database_names()
-    databases_with_counts = []
+    databases_with_stats = []
     for database_name in databases:
         db = client[database_name]
-        collections_count = len(db.list_collection_names())
-        databases_with_counts.append({'name': database_name, 'count': collections_count})
-    return render_template('databases.html', databases=databases_with_counts)
+        stats = db.command("dbstats")
+        databases_with_stats.append({
+            'name': database_name,
+            'collections_count': len(db.list_collection_names()),
+            'data_size': stats.get('dataSize', 0),
+            'storage_size': stats.get('storageSize', 0),
+            'index_size': stats.get('indexSize', 0),
+            'file_size': stats.get('fileSize', 0)  # Use .get() to provide a default value
+        })
+    return render_template('databases.html', databases=databases_with_stats)
 
-
-
-# Route to list collections in a database
 @app.route('/collections/<database_name>', methods=['GET'])
 def list_collections(database_name):
-    collections = client[database_name].list_collection_names()
-    collections_with_counts = []
+    db = client[database_name]
+    collections = db.list_collection_names()
+    collections_with_stats = []
     for collection_name in collections:
-        collection = client[database_name][collection_name]
-        count = collection.count_documents({})
-        collections_with_counts.append({'name': collection_name, 'count': count})
-    return render_template('collections.html', collections=collections_with_counts, database=database_name)
-
+        stats = db.command("collstats", collection_name)
+        collections_with_stats.append({
+            'name': collection_name,
+            'document_count': stats.get('count', 0),
+            'data_size': stats.get('size', 0),
+            'storage_size': stats.get('storageSize', 0),
+            'index_size': stats.get('totalIndexSize', 0),
+            'avg_doc_size': stats.get('avgObjSize', 0)
+        })
+    return render_template('collections.html', collections=collections_with_stats, database=database_name)
 
 # Route to retrieve all documents from a collection
 # @app.route('/collections/<database_name>/<collection_name>', methods=['GET'])

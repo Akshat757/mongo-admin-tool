@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Collections List</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
     <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 <body>
@@ -14,13 +13,21 @@
             <tr>
                 <th>Collection Name</th>
                 <th>Document Count</th>
+                <th>Data Size</th>
+                <th>Storage Size</th>
+                <th>Index Size</th>
+                <th>Average Document Size</th>
             </tr>
         </thead>
         <tbody>
             {% for collection in collections %}
             <tr>
                 <td><a href="/collections/{{ database }}/{{ collection.name }}">{{ collection.name }}</a></td>
-                <td>{{ collection.count }}</td>
+                <td>{{ collection.document_count }}</td>
+                <td>{{ collection.data_size }}</td>
+                <td>{{ collection.storage_size }}</td>
+                <td>{{ collection.index_size }}</td>
+                <td>{{ collection.avg_doc_size }}</td>
             </tr>
             {% endfor %}
         </tbody>
