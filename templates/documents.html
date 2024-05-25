@@ -6,8 +6,9 @@
     <title>Documents List</title>
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
     <link rel="stylesheet" href="../static/css/styles.css">
-
 </head>
+
+
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -17,6 +18,11 @@
     h1 {
         text-align: center;
         margin-top: 20px;
+    }
+
+    .button-container {
+        text-align: center;
+        margin-bottom: 20px;
     }
 
     table {
@@ -40,28 +46,135 @@
         background-color: #f5f5f5;
     }
 
+    .crud-button {
+        padding: 5px 10px;
+        margin: 2px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .create-button {
+        background-color: #4CAF50; /* Green */
+        color: white;
+    }
+
+    .update-button {
+        background-color: #2196F3; /* Blue */
+        color: white;
+    }
+
+    .delete-button {
+        background-color: #f44336; /* Red */
+        color: white;
+    }
+
 </style>
+
+
+<script>
+    function showNewRow() {
+        var table = document.getElementById('documents-table');
+        var row = table.insertRow(-1);
+        var cellCount = table.rows[0].cells.length;
+
+        for (var i = 0; i < cellCount; i++) {
+            var cell = row.insertCell(i);
+            // Skip the first cell if it corresponds to the `_id` field
+            if (i === 0) {
+                cell.innerHTML = ''; // Create an empty cell for `_id`
+            } else if (i === cellCount - 1) {
+                // Actions column
+                cell.innerHTML = '<button onclick="saveNewRow()">Save</button>';
+            } else if(i>0 && i<cellCount-1) {
+                // Other fields
+                cell.innerHTML = '<input type="text" name="new_' + i + '">';
+            }
+        }
+    }
+
+
+    function saveNewRow() {
+        var inputs = document.querySelectorAll('input[name^="new_"]');
+        var data = {};
+        inputs.forEach(function(input, index) {
+            data['field_' + index] = input.value;
+        });
+
+        data['database_name'] = "{{ database }}";
+        data['collection_name'] = "{{ collection_name }}";
+
+        fetch('/save_new_row', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to save the new row: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+    }
+
+    function deleteRow(documentId) {
+        fetch('/delete_row', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ document_id: documentId, database_name: "{{ database }}", collection_name: "{{ collection_name }}" })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to delete the row: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+    }
+</script>
+
+
 <body>
-    <h1>Documents List</h1>
-    <table>
-        <thead>
-            <tr>
-                <!-- Dynamically generate table headers based on the fields of the first document -->
-                {% for field in documents[0].keys() %}
-                    <th>{{ field }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for document in documents %}
-            <tr>
-                <!-- Dynamically generate table cells based on the fields of each document -->
-                {% for value in document.values() %}
-                    <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
+<h1>Documents List</h1>
+<div class="button-container">
+    <button class="crud-button create-button" onclick="showNewRow()">New Row</button>
+</div>
+<table id="documents-table">
+    <thead>
+        <tr>
+            {% for field in documents[0].keys() %}
+                <th>{{ field }}</th>
             {% endfor %}
-        </tbody>
-    </table>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for document in documents %}
+        <tr>
+            {% for value in document.values() %}
+                <td>{{ value }}</td>
+            {% endfor %}
+            <td>
+                <button class="crud-button delete-button" onclick="deleteRow('{{ document._id }}')">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>
