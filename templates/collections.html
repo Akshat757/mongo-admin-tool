@@ -8,6 +8,16 @@
 </head>
 <body>
     <h1>Collections List</h1>
+    <div class="button-container-col">
+        <button class="crud-button create-button" onclick="document.getElementById('new-collection-form').style.display='block'">New Collection</button>
+    </div>
+    <div id="new-collection-form" style="display:none;">
+        <form action="/create_collection/{{ database }}" method="POST">
+            <label for="collection-name">Collection Name:</label>
+            <input type="text" id="collection-name" name="collection_name" required>
+            <button type="submit">Create</button>
+        </form>
+    </div>
     <table>
         <thead>
             <tr>

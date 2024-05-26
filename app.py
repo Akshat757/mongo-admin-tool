@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, redirect
+from flask import Flask, jsonify, request, render_template, redirect, url_for
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import config as c
@@ -60,9 +60,15 @@ def list_collections(database_name):
 def get_documents(database_name, collection_name):
     collection = client[database_name][collection_name]
     documents = list(collection.find())
-    print(f"Database: {database_name}, Collection: {collection_name}")  # Debug print
     return render_template('documents.html', collection_name=collection_name, documents=documents, database=database_name)
 
+
+@app.route('/create_collection/<database_name>', methods=['POST'])
+def create_collection(database_name):
+    collection_name = request.form['collection_name']
+    db = client[database_name]
+    db.create_collection(collection_name)
+    return redirect(url_for('list_collections', database_name=database_name))
 
 # Route to save a new row
 @app.route('/save_new_row', methods=['POST'])
