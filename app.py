@@ -49,18 +49,20 @@ def list_collections(database_name):
         })
     return render_template('collections.html', collections=collections_with_stats, database=database_name)
 
-# Route to retrieve all documents from a collection
-# @app.route('/collections/<database_name>/<collection_name>', methods=['GET'])
-# def get_documents(database_name, collection_name):
-#     collection = client[database_name][collection_name]
-#     documents = list(collection.find())
-#     return render_template('documents.html', collection_name=collection_name, documents=documents)
 
 @app.route('/collections/<database_name>/<collection_name>', methods=['GET'])
 def get_documents(database_name, collection_name):
     collection = client[database_name][collection_name]
     documents = list(collection.find())
-    return render_template('documents.html', collection_name=collection_name, documents=documents, database=database_name)
+
+    columns = []
+    if documents:
+        columns = documents[0].keys()
+    else:
+        columns = request.args.getlist('columns')  # Get columns from query params if provided
+
+    return render_template('documents.html', collection_name=collection_name, documents=documents, columns=columns, database=database_name)
+
 
 
 @app.route('/create_collection/<database_name>', methods=['POST'])
@@ -96,17 +98,18 @@ def save_new_row():
 def delete_row():
     try:
         data = request.get_json()
-        # data = request.json
+        document_id = data['document_id']
         database_name = data['database_name']
         collection_name = data['collection_name']
-        document_id = data['document_id']
-        
         collection = client[database_name][collection_name]
-        collection.delete_one({'_id': ObjectId(document_id)})
-        
-        return jsonify(success=True)
+        result = collection.delete_one({'_id': ObjectId(document_id)})
+        if result.deleted_count == 1:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error='Document not found')
     except Exception as e:
         return jsonify(success=False, error=str(e)), 500
+
 
 
 
