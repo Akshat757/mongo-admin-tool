@@ -4,14 +4,17 @@ from bson.objectid import ObjectId
 import config as c
 app = Flask(__name__)
 
+
 # MongoDB Connection
 client = MongoClient(c.db_url)
 db = client[c.db_name]  # Change 'my_database' to your database name
+
 
 # Route to list all databases
 @app.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
+
 
 # Route to list all databases
 # route database
@@ -31,6 +34,7 @@ def list_databases():
             'file_size': stats.get('fileSize', 0)  # Use .get() to provide a default value
         })
     return render_template('databases.html', databases=databases_with_stats)
+
 
 @app.route('/collections/<database_name>', methods=['GET'])
 def list_collections(database_name):
@@ -64,13 +68,13 @@ def get_documents(database_name, collection_name):
     return render_template('documents.html', collection_name=collection_name, documents=documents, columns=columns, database=database_name)
 
 
-
 @app.route('/create_collection/<database_name>', methods=['POST'])
 def create_collection(database_name):
     collection_name = request.form['collection_name']
     db = client[database_name]
     db.create_collection(collection_name)
     return redirect(url_for('list_collections', database_name=database_name))
+
 
 # Route to save a new row
 @app.route('/save_new_row', methods=['POST'])
@@ -93,6 +97,7 @@ def save_new_row():
         app.logger.error(f"Error saving new row: {e}")
         return jsonify(success=False, error=str(e)), 500
 
+
 # Route to delete a row
 @app.route('/delete_row', methods=['POST'])
 def delete_row():
@@ -109,9 +114,6 @@ def delete_row():
             return jsonify(success=False, error='Document not found')
     except Exception as e:
         return jsonify(success=False, error=str(e)), 500
-
-
-
 
 
 if __name__ == '__main__':
