@@ -150,26 +150,26 @@
             });
         }
 
-    function createColumns(event) {
-            event.preventDefault();
-            var columnNames = document.getElementById('column-names').value.split(',');
-            var table = document.getElementById('documents-table');
-            var headerRow = table.createTHead().insertRow(0);
+    // function createColumns(event) {
+    //         event.preventDefault();
+    //         var columnNames = document.getElementById('column-names').value.split(',');
+    //         var table = document.getElementById('documents-table');
+    //         var headerRow = table.createTHead().insertRow(0);
 
-            columnNames.forEach(function(name) {
-                var cell = document.createElement("th");
-                cell.textContent = name.trim();
-                headerRow.appendChild(cell);
-            });
+    //         columnNames.forEach(function(name) {
+    //             var cell = document.createElement("th");
+    //             cell.textContent = name.trim();
+    //             headerRow.appendChild(cell);
+    //         });
 
-            var actionsCell = document.createElement("th");
-            actionsCell.textContent = "Actions";
-            headerRow.appendChild(actionsCell);
+    //         var actionsCell = document.createElement("th");
+    //         actionsCell.textContent = "Actions";
+    //         headerRow.appendChild(actionsCell);
 
-            table.style.display = 'table';
-            document.getElementById('columns-form').style.display = 'none';
-            showNewRow();
-        }
+    //         table.style.display = 'table';
+    //         document.getElementById('columns-form').style.display = 'none';
+    //         showNewRow();
+    //     }
 
 </script>
 
@@ -179,7 +179,8 @@
 <div class="button-container">
     <button class="crud-button create-button" onclick="showNewRow()">New Row</button>
 </div>
-{% if not documents %}
+
+<!-- {% if not documents %}
     <div class="form-container">
         <form id="columns-form" onsubmit="createColumns(event)">
             <label for="column-names">Enter Column Names (comma separated):</label>
@@ -187,7 +188,7 @@
             <button type="submit">Create Columns</button>
         </form>
     </div>
-    {% endif %}
+    {% endif %} -->
 
     <table id="documents-table" {% if not documents and not columns %}style="display:none;"{% endif %}>
         <thead>
