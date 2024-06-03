@@ -150,27 +150,6 @@
             });
         }
 
-    // function createColumns(event) {
-    //         event.preventDefault();
-    //         var columnNames = document.getElementById('column-names').value.split(',');
-    //         var table = document.getElementById('documents-table');
-    //         var headerRow = table.createTHead().insertRow(0);
-
-    //         columnNames.forEach(function(name) {
-    //             var cell = document.createElement("th");
-    //             cell.textContent = name.trim();
-    //             headerRow.appendChild(cell);
-    //         });
-
-    //         var actionsCell = document.createElement("th");
-    //         actionsCell.textContent = "Actions";
-    //         headerRow.appendChild(actionsCell);
-
-    //         table.style.display = 'table';
-    //         document.getElementById('columns-form').style.display = 'none';
-    //         showNewRow();
-    //     }
-
 </script>
 
 
@@ -179,16 +158,6 @@
 <div class="button-container">
     <button class="crud-button create-button" onclick="showNewRow()">New Row</button>
 </div>
-
-<!-- {% if not documents %}
-    <div class="form-container">
-        <form id="columns-form" onsubmit="createColumns(event)">
-            <label for="column-names">Enter Column Names (comma separated):</label>
-            <input type="text" id="column-names" name="column_names" required>
-            <button type="submit">Create Columns</button>
-        </form>
-    </div>
-    {% endif %} -->
 
     <table id="documents-table" {% if not documents and not columns %}style="display:none;"{% endif %}>
         <thead>
