@@ -35,7 +35,7 @@ def list_databases():
         })
     return render_template('databases.html', databases=databases_with_stats)
 
-
+# route for showing databases
 @app.route('/collections/<database_name>', methods=['GET'])
 def list_collections(database_name):
     db = client[database_name]
