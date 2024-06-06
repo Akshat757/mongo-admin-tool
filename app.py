@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # MongoDB Connection
 client = MongoClient(c.db_url)
-db = client[c.db_name]  # Change 'my_database' to your database name
+db = client[c.db_name]  
 
 
 # Route to list all databases
@@ -31,7 +31,7 @@ def list_databases():
             'data_size': stats.get('dataSize', 0),
             'storage_size': stats.get('storageSize', 0),
             'index_size': stats.get('indexSize', 0),
-            'file_size': stats.get('fileSize', 0)  # Use .get() to provide a default value
+            'file_size': stats.get('fileSize', 0)  
         })
     return render_template('databases.html', databases=databases_with_stats)
 
@@ -47,9 +47,7 @@ def list_collections(database_name):
             'name': collection_name,
             'document_count': stats.get('count', 0),
             'data_size': stats.get('size', 0),
-            'storage_size': stats.get('storageSize', 0),
-            'index_size': stats.get('totalIndexSize', 0),
-            'avg_doc_size': stats.get('avgObjSize', 0)
+            'storage_size': stats.get('storageSize', 0)
         })
     return render_template('collections.html', collections=collections_with_stats, database=database_name)
 
