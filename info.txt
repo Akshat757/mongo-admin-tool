@@ -1,0 +1,19 @@
+database -> collection -> document
+
+database: 
+    add a new database, must add a collection with it too
+
+collection:
+    add a collection:
+        give collection name
+
+document:
+    add data:
+        to add data we should use json format like - 
+            {
+                "id" : kl3a245jn15vkajn ,
+                "name" : "john" ,
+                "location" : "India"
+            }
+            (id is given by mongo itself)
+            (there is no schema in mongo as it is noSQL i.e. data in a document all need not have same fields)
